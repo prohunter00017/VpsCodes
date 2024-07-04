@@ -1,16 +1,13 @@
 #!/bin/bash
 
-# Update the package lists
+# Update the package list
 sudo apt update
 
-# Install squid
-sudo apt install -y squid
+# Install Squid, automatically selecting "yes" when prompted
+sudo apt -y install squid
 
 # Download the new squid.conf file
-wget https://raw.githubusercontent.com/prohunter00017/VpsCodes/main/squid.conf
+wget -O /etc/squid/squid.conf https://raw.githubusercontent.com/prohunter00017/VpsCodes/main/squid.conf
 
-# Move the new squid.conf file to /etc/squid/, replacing the existing file
-sudo mv squid.conf /etc/squid/
-
-# Restart the squid service
+# Restart the Squid service
 sudo systemctl restart squid.service
