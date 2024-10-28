@@ -10,8 +10,9 @@ sudo apt -y install dante-server
 sudo bash -c 'cat > /etc/danted.conf <<EOF
 logoutput: syslog
 
-internal: eth0 port = 1080
-external: eth0
+# Listen on all interfaces
+internal: 0.0.0.0 port = 1080
+external: 0.0.0.0
 
 method: username none
 
@@ -41,7 +42,10 @@ Type=simple
 ExecStart=/usr/sbin/danted -f /etc/danted.conf
 ExecReload=/bin/kill -HUP \$MAINPID
 Restart=always
-RestartSec=5
+RestartSec=10
+StartLimitIntervalSec=0
+LimitNOFILE=infinity
+LimitNPROC=infinity
 
 [Install]
 WantedBy=multi-user.target
