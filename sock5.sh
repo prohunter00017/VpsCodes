@@ -6,11 +6,11 @@ sudo apt update
 # Install dante-server
 sudo apt -y install dante-server
 
-# Create the danted.conf file with specific settings
+# Overwrite the danted.conf file with the updated configuration
 sudo bash -c 'cat > /etc/danted.conf <<EOF
 logoutput: syslog
 
-# Listen on all interfaces
+# Listen on all interfaces for maximum compatibility
 internal: 0.0.0.0 port = 1080
 external: 0.0.0.0
 
@@ -31,7 +31,7 @@ pass {
 }
 EOF'
 
-# Create or update the systemd service file to ensure Dante restarts automatically on failure
+# Overwrite the systemd service file with updated configurations for Dante
 sudo bash -c 'cat > /etc/systemd/system/danted.service <<EOF
 [Unit]
 Description=Dante SOCKS Proxy Server
@@ -51,15 +51,17 @@ LimitNPROC=infinity
 WantedBy=multi-user.target
 EOF'
 
-# Reload the systemd daemon to apply changes to the danted service
+# Reload the systemd daemon to apply any updates to the service configuration
 sudo systemctl daemon-reload
 
-# Enable and start the danted service to ensure it starts on boot and restarts on failure
+# Enable and restart the danted service to ensure the latest configuration is applied
 sudo systemctl enable danted
 sudo systemctl restart danted
 
-# Open the port in the firewall to allow external connections on port 1080
+# Reset and open the firewall ports for the SOCKS5 proxy on both TCP and UDP protocols
+sudo ufw delete allow 1080/tcp
+sudo ufw delete allow 1080/udp
 sudo ufw allow 1080/tcp
 sudo ufw allow 1080/udp
 
-echo "Dante SOCKS Proxy Server setup complete. The server will automatically restart on boot and on failure."
+echo "Dante SOCKS Proxy Server has been updated and is running. All configurations have been overridden."
